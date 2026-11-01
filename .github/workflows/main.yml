@@ -1,0 +1,24 @@
+name: Compile MiSTer Core
+
+on:
+  workflow_dispatch: # Ermöglicht es dir, den Build manuell zu starten
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: cloudfpga/quartus:17.0.2 # Nutzt ein fertiges Quartus-Image in der Cloud
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Compile Core
+        run: |
+          quartus_sh --flow compile Arcade-ITech32
+
+      - name: Upload RBF File
+        uses: actions/upload-artifact@v4
+        with:
+          name: Arcade-ITech32-RBF
+          path: output_files/Arcade-ITech32.rbf
