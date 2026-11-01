@@ -1,21 +1,22 @@
 name: Compile MiSTer Core
 
 on:
-  workflow_dispatch: # Ermöglicht es dir, den Build manuell zu starten
+  workflow_dispatch: # Ermöglicht den manuellen Start über den Actions-Reiter
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: cloudfpga/quartus:17.0.2 # Nutzt ein fertiges Quartus-Image in der Cloud
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Compile Core
-        run: |
-          quartus_sh --flow compile Arcade-ITech32
+      - name: Run Quartus Compilation
+        uses: raetro/quartus-flow@v1
+        with:
+          project: 'Arcade-ITech32'  # Name deiner .qpf Datei
+          version: '17.1'            # Nutzt das kompatible Quartus 17.1 Image
+          project_folder: '.'        # Projekt liegt im Hauptverzeichnis
 
       - name: Upload RBF File
         uses: actions/upload-artifact@v4
